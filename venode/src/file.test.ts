@@ -40,7 +40,7 @@ const cases = [
 
 test("hashing/url-to-file should be compatible with deno", () => {
   for (const [url, expected] of cases) {
-    expect(urlToFilename(new URL(url))).toEqual(expected);
+    expect(urlToFilename(new URL(url))).toEqual(expected.split(path.posix.sep).join(path.sep));
   }
 });
 
