@@ -10,7 +10,9 @@ describe("", async () => {
     stdout = (await execa("pnpm", ["venode", "index.ts"], { stdout: "pipe" }))
       .stdout;
     console.log(stdout);
-  } catch {}
+  } catch (e) {
+    console.log('error', e);
+  }
 
   test("download imports", () => {
     expect(stdout).toContain("Download");
