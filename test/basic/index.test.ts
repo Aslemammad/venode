@@ -5,15 +5,12 @@ import { Meta } from "../../venode/src/types";
 
 describe("", async () => {
   let stdout: string;
-  beforeAll(async () => {
-    try {
-      await fs.rm("node_modules/https", { recursive: true });
-      stdout = (
-        await execa("pnpm", ["venode", "index.ts"], { stdout: "pipe" })
-      ).stdout;
-      console.log(stdout);
-    } catch {}
-  });
+  try {
+    await fs.rm("node_modules/https", { recursive: true });
+    stdout = (await execa("pnpm", ["venode", "index.ts"], { stdout: "pipe" }))
+      .stdout;
+    console.log(stdout);
+  } catch {}
 
   test("download imports", () => {
     expect(stdout).toContain("Download");
