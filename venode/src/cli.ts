@@ -34,6 +34,7 @@ import { Extension, Meta } from "./types";
           const { pathname, href } = new URL(module[0]);
 
           const newId = path.join(path.dirname(pathname), id);
+          console.log('newId', newId)
 
           return href.replace(pathname, newId);
         },
