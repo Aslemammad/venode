@@ -7,11 +7,13 @@ describe("", async () => {
   let stdout: string;
   try {
     await fs.rm("node_modules/https", { recursive: true });
+  } catch {}
+  try {
     stdout = (await execa("pnpm", ["venode", "index.ts"], { stdout: "pipe" }))
       .stdout;
     console.log(stdout);
   } catch (e) {
-    console.log('error', e);
+    console.log("error", e);
   }
 
   test("download imports", () => {
