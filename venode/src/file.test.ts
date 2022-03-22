@@ -1,6 +1,9 @@
+import path from 'path';
 import { expect, test } from "vitest";
 import { filenameWithExtension, urlToFilename } from "./file";
 import { Extension } from "./types";
+
+const isWindows = process.platform === "win32";
 
 const cases = [
   [
@@ -56,6 +59,6 @@ const exts = [
 
 test("get file with extension", () => {
   for (const [url, ext, expected] of exts) {
-    expect(filenameWithExtension(new URL(url), ext as Extension)).toEqual(expected);
+    expect(filenameWithExtension(new URL(url), ext as Extension)).toEqual(expected.split(path.posix.sep).join(path.sep));
   }
 });
