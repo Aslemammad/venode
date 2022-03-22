@@ -54,6 +54,7 @@ import { Extension, Meta } from "./types";
       return node.fetchModule(id);
     },
     async resolveId(id, importer) {
+      console.log('resolveId', id, importer)
       if (!id.startsWith("http")) {
         return node.resolveId(id, importer);
       }
