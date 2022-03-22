@@ -1,7 +1,7 @@
 import mkdirp from "mkdirp";
 import { promises as fs } from "fs";
 import mime from "mime-types";
-import path from "path";
+import {posix as path} from "path";
 import c from "picocolors";
 import { fetch } from "undici";
 import { createServer } from "vite";

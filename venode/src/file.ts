@@ -1,5 +1,5 @@
 // functions/tests are from deno/cli/http_cache.rs
-import path from "path";
+import { posix as path } from "path";
 import { createHash } from "crypto";
 import assert from "assert";
 import { Extension } from "./types";

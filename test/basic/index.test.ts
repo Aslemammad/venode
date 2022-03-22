@@ -1,4 +1,4 @@
-import path from "path";
+import {posix as path} from "path";
 import { promises as fs } from "fs";
 import { execa } from "execa";
 import { test, expect, describe } from "vitest";

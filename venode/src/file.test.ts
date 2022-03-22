@@ -1,9 +1,7 @@
-import path from 'path';
+import { posix as path } from "path";
 import { expect, test } from "vitest";
 import { filenameWithExtension, urlToFilename } from "./file";
 import { Extension } from "./types";
-
-const isWindows = process.platform === "win32";
 
 const cases = [
   [
@@ -40,7 +38,9 @@ const cases = [
 
 test("hashing/url-to-file should be compatible with deno", () => {
   for (const [url, expected] of cases) {
-    expect(urlToFilename(new URL(url))).toEqual(expected.split(path.posix.sep).join(path.sep));
+    expect(urlToFilename(new URL(url))).toEqual(
+      expected.split(path.posix.sep).join(path.sep)
+    );
   }
 });
 
@@ -59,6 +59,8 @@ const exts = [
 
 test("get file with extension", () => {
   for (const [url, ext, expected] of exts) {
-    expect(filenameWithExtension(new URL(url), ext as Extension)).toEqual(expected.split(path.posix.sep).join(path.sep));
+    expect(filenameWithExtension(new URL(url), ext as Extension)).toEqual(
+      expected.split(path.posix.sep).join(path.sep)
+    );
   }
 });
