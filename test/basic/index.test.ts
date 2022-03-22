@@ -1,3 +1,4 @@
+import path from 'path'
 import { promises as fs } from "fs";
 import { execa } from "execa";
 import { test, expect, describe } from "vitest";
@@ -6,7 +7,7 @@ import { Meta } from "../../venode/src/types";
 describe("", async () => {
   let stdout: string;
   try {
-    await fs.rm("node_modules/https", { recursive: true });
+    await fs.rm(path.join(".", "node_modules", "https"), { recursive: true });
   } catch {}
   try {
     stdout = (await execa("pnpm", ["venode", "index.ts"], { stdout: "pipe" }))
