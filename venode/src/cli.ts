@@ -25,9 +25,11 @@ import { Extension, Meta } from "./types";
         name: "venode:pre",
         resolveId(id, importer) {
           if (!id.startsWith(".")) return null;
+
           const module = [...handledModules.entries()].find(
             (item) => item[1] === importer
           );
+          console.log('module', module)
           if (!module) {
             return null;
           }
