@@ -1,12 +1,15 @@
 {
-  "main": "./dist/index.js",
+  "name": "basic",
+  "type": "module",
+  "version": "0.0.0",
+  "description": "",
+  "main": "index.ts",
   "scripts": {
-    "test": "vitest",
-    "build": "rimraf dist/ && vite-plugin-cloudflare build ./index.ts ./dist/index.js",
-    "run": "miniflare"
+    "test": "pnpm vitest"
   },
+  "author": "M. Bagher Abiat",
+  "license": "ISC",
   "dependencies": {
-    "miniflare": "^2.3.0",
-    "vite-plugin-cloudflare": "workspace:latest"
+    "venode": "workspace:^0.1.0"
   }
 }

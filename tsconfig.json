@@ -13,6 +13,7 @@
     "outDir": "./dist",
     "declaration": true,
     "inlineSourceMap": true,
+    "types": ["vitest/importMeta"],
     "paths": {
       "vitest": ["./packages/vitest/src/index.ts"],
       "vitest/global.d.ts": ["./packages/vitest/global.d.ts"]
