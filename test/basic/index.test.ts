@@ -8,7 +8,10 @@ describe("", async () => {
   beforeAll(async () => {
     try {
       await fs.rm("node_modules/https", { recursive: true });
-      ({ stdout } = await execa("pnpm", ["venode", "index.ts"]));
+      stdout = (
+        await execa("pnpm", ["venode", "index.ts"], { stdout: "pipe" })
+      ).stdout;
+      console.log(stdout);
     } catch {}
   });
 
