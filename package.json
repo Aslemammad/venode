@@ -7,7 +7,7 @@
     "build": "pnpm -r --filter venode run build",
     "dev": "pnpm -r --filter venode run dev",
     "test:core": "pnpm -r --filter basic run test",
-    "test:all": "CI=true cross-env pnpm -r --stream run test --",
+    "test:all": "cross-env CI=true pnpm -r --stream run test --",
     "typecheck": "pnpm -r --parallel run typecheck",
     "lint": "echo TODO"
   },
