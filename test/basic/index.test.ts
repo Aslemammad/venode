@@ -7,8 +7,11 @@ import { Meta } from "../../venode/src/types";
 describe("", async () => {
   let stdout: string;
   try {
+    console.log(path.join(".", "node_modules", "https"))
     await fs.rm(path.join(".", "node_modules", "https"), { recursive: true });
-  } catch {}
+  } catch (e) {
+    console.log(e)
+  }
   try {
     stdout = (await execa("pnpm", ["venode", "index.ts"], { stdout: "pipe" }))
       .stdout;
