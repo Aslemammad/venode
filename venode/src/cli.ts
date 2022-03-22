@@ -29,7 +29,7 @@ import { Extension, Meta } from "./types";
           const module = [...handledModules.entries()].find(
             (item) => item[1] === importer
           );
-          console.log('module', [...handledModules.entries()], module)
+          console.log('module', [...handledModules.entries()], module, importer)
           if (!module) {
             return null;
           }
