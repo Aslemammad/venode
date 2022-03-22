@@ -40,6 +40,8 @@ jobs:
 
       - name: Build
         run: pnpm run build
+        with:
+          key: ${{ runner.os }}-mycache-${{ secrets.CACHE_VERSION }}-${{ hashFiles(...) }}
 
       - name: Test 
         run: pnpm run test:all
