@@ -25,18 +25,15 @@ import { Extension, Meta } from "./types";
         name: "venode:pre",
         resolveId(id, importer) {
           if (!id.startsWith(".")) return null;
-
           const module = [...handledModules.entries()].find(
             (item) => item[1] === importer
           );
-          console.log('module', [...handledModules.entries()], module, importer)
           if (!module) {
             return null;
           }
           const { pathname, href } = new URL(module[0]);
 
           const newId = path.join(path.dirname(pathname), id);
-          console.log("newId", newId);
 
           return href.replace(pathname, newId);
         },
@@ -44,8 +41,7 @@ import { Extension, Meta } from "./types";
       {
         enforce: "pre",
         name: "venode",
-        async resolveId(id, importer) {
-          console.log("resolveId", id, importer);
+        async resolveId(id) {
           if (!id.startsWith("http")) {
             return null;
           }

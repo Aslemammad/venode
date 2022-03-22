@@ -7,7 +7,6 @@ import { Meta } from "../../venode/src/types";
 describe("", async () => {
   let stdout: string;
   try {
-    console.log(path.join(".", "node_modules", "https"));
     await fs.rm(path.join(".", "node_modules", "https"), { recursive: true });
   } catch (e) {
     console.log(e);
@@ -15,7 +14,6 @@ describe("", async () => {
   try {
     stdout = (await execa("pnpm", ["venode", "index.ts"], { stdout: "pipe" }))
       .stdout;
-    console.log(stdout);
   } catch (e) {
     console.log("error", e);
   }
