@@ -1,6 +1,6 @@
 import { promises as fs } from "fs";
 import { execa } from "execa";
-import { test, expect, describe, beforeAll } from "vitest";
+import { test, expect, describe } from "vitest";
 import { Meta } from "../../venode/src/types";
 
 describe("", async () => {
@@ -11,7 +11,6 @@ describe("", async () => {
   try {
     stdout = (await execa("pnpm", ["venode", "index.ts"], { stdout: "pipe" }))
       .stdout;
-    console.log(stdout);
   } catch (e) {
     console.log("error", e);
   }

@@ -1,5 +1,6 @@
 import { expect, test } from "vitest";
 import { filenameWithExtension, urlToFilename } from "./file";
+import { Extension } from "./types";
 
 const cases = [
   [
@@ -55,6 +56,6 @@ const exts = [
 
 test("get file with extension", () => {
   for (const [url, ext, expected] of exts) {
-    expect(filenameWithExtension(new URL(url), ext)).toEqual(expected);
+    expect(filenameWithExtension(new URL(url), ext as Extension)).toEqual(expected);
   }
 });
