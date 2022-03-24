@@ -42,7 +42,7 @@ if (isVendor && importMap) {
     plugins: [
       {
         enforce: "pre",
-        name: "venode:resolve",
+        name: "venode:vendor:resolve",
         resolveId(id) {
           if (!importMap) return null
           if (vendor.imports[id]) {

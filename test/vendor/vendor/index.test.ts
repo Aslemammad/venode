@@ -8,16 +8,20 @@ describe("", async () => {
 
   let runStdout: string;
   try {
-    await fs.rm(path.join(".", "node_modules", "https"), { recursive: true });
-  } catch (e) {
-    console.log(e);
-  }
-  try {
     vendorStdout = (
       await execa("pnpm", ["venode", "vendor", "index.ts"], { stdout: "pipe" })
     ).stdout;
+    try {
+      await fs.rm(path.join(".", "node_modules", "https"), { recursive: true });
+    } catch (e) {
+      console.log(e);
+    }
     runStdout = (
-      await execa("pnpm", ["venode", "index.ts"], { stdout: "pipe" })
+      await execa(
+        "pnpm",
+        ["venode", "index.ts", "--import-map=vendor/import_map.json"],
+        { stdout: "pipe" }
+      )
     ).stdout;
   } catch (e) {
     console.log("error", e);
