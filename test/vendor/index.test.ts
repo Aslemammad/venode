@@ -10,6 +10,7 @@ describe("", async () => {
   try {
     try {
       await fs.rm(path.join(".", "node_modules", "https"), { recursive: true });
+      await fs.rm(path.join(".", "vendor"), { recursive: true });
     } catch (e) {
       console.log(e);
     }
