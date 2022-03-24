@@ -9,6 +9,7 @@
   "author": "M. Bagher Abiat",
   "license": "ISC",
   "dependencies": {
+    "picocolors": "^1.0.0",
     "venode": "workspace:^0.1.0"
   }
 }

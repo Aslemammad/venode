@@ -64,8 +64,10 @@ importers:
 
   test/vendor:
     specifiers:
+      picocolors: ^1.0.0
       venode: workspace:^0.1.0
     dependencies:
+      picocolors: 1.0.0
       venode: link:../../venode
 
   venode:
