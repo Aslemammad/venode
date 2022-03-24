@@ -94,7 +94,7 @@ if (isVendor && importMap) {
           const module = [...handledModules.entries()].find(
             (item) => item[1] === importer
           );
-          console.log(module, id, importer)
+          console.log('here', module, id, importer)
           if (!module) {
             return null;
           }
