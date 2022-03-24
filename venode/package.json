@@ -33,6 +33,7 @@
     "@types/mkdirp": "^1.0.2",
     "@types/rollup-plugin-node-builtins": "^2.1.2",
     "@types/rollup-plugin-node-globals": "^1.4.1",
+    "consola": "^2.15.3",
     "miniflare": "^2.3.0",
     "mkdirp": "^1.0.4",
     "setimmediate": "^1.0.5",

@@ -76,6 +76,7 @@ importers:
       '@types/rollup-plugin-node-globals': ^1.4.1
       buffer-es6: ^4.9.3
       cac: ^6.7.12
+      consola: ^2.15.3
       esbuild: ^0.14.6
       mime-types: ^2.1.35
       miniflare: ^2.3.0
@@ -107,6 +108,7 @@ importers:
       '@types/mkdirp': 1.0.2
       '@types/rollup-plugin-node-builtins': 2.1.2
       '@types/rollup-plugin-node-globals': 1.4.1
+      consola: 2.15.3
       miniflare: 2.3.0
       mkdirp: 1.0.4
       setimmediate: 1.0.5
@@ -734,6 +736,10 @@ packages:
       readable-stream: 2.3.7
       typedarray: 0.0.6
     dev: false
+
+  /consola/2.15.3:
+    resolution: {integrity: sha512-9vAdYbHj6x2fLKC4+oPH0kFzY/orMZyG2Aj+kNylHxKGJ/Ed4dpNyAQYwJOdqO4zdM7XpVHmyejQDcQHrnuXbw==}
+    dev: true
 
   /cookie/0.4.1:
     resolution: {integrity: sha512-ZwrFkGJxUR3EIoXtO+yVE69Eb7KlixbaeAWfBQB9vVsNn/o+Yw69gBWSSDK825hQNdN+wF8zELf3dFNl/kxkUA==}

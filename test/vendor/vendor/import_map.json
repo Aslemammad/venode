@@ -1,0 +1,8 @@
+{
+  "imports": {
+    "picocolors": "picocolors/picocolors.browser.js",
+    "https://ga.jspm.io/npm:is-number@7.0.0/index.js": "ga.jspm.io/npm_is-number@7.0.0/index.js",
+    "https://raw.githubusercontent.com/denoland/deno_std/main/_util/deep_assign.ts": "raw.githubusercontent.com/denoland/deno_std/main/_util/deep_assign.ts",
+    "https://raw.githubusercontent.com/denoland/deno_std/main/_util/assert.ts": "raw.githubusercontent.com/denoland/deno_std/main/_util/assert.ts"
+  }
+}

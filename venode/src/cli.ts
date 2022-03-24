@@ -8,6 +8,7 @@ import { fetch } from "undici";
 import { createServer } from "vite";
 import { ViteNodeServer } from "vite-node/server";
 import { ViteNodeRunner } from "vite-node/client";
+import log from "consola";
 import {
   filenameWithExtension,
   isValidExtension,
@@ -17,17 +18,39 @@ import {
 } from "./file";
 import { Extension, Meta, Vendor } from "./types";
 import { moduleToVendorPath } from "./module";
+const isVendor = process.argv.includes("vendor");
+const isImportMap = process.argv.findIndex((i) => i.includes("--import-map"));
+const importMap =
+  isImportMap > -1 ? process.argv[isImportMap].split("=")[1] : null;
+
+if (isVendor && importMap) {
+  log.error("--import-map is not supported when --vendor is enabled.");
+  process.exit(1);
+}
 
 (async () => {
   const handledModules = new Map<string, string>();
-  const isVendor = process.argv.includes("vendor");
   const dest = path.join(process.cwd(), "node_modules");
-  const vendor: Vendor = { imports: {} };
+  let vendor: Vendor = { imports: {} };
+  try {
+    vendor = JSON.parse(await fs.readFile(importMap!, "utf8"));
+    log.success(`Reading modules from vendor/import_map.json`)
+  } catch {}
   const vendorDir = path.join(process.cwd(), "vendor");
-  console.log(process.argv, isVendor);
 
   const server = await createServer({
     plugins: [
+      {
+        enforce: "pre",
+        name: "venode:resolve",
+        resolveId(id) {
+          if (!importMap) return null
+          if (vendor.imports[id]) {
+            return path.join(vendorDir, vendor.imports[id])
+          }
+          return null;
+        },
+      },
       {
         enforce: "pre",
         name: "venode:vendor",
@@ -54,21 +77,11 @@ import { moduleToVendorPath } from "./module";
               vendorDir,
               urlToFilenameWithoutHash(new URL(originalId))
             );
-            try {
-              await mkdirp(path.dirname(vendorPath));
-              await fs.copyFile(id, vendorPath);
-            } catch (e) {
-              throw new Error(`Could not create vendor file for ${originalId}`);
-            }
+            copyVendor(originalId, id, vendorPath);
             vendor.imports[originalId] = path.relative(vendorDir, vendorPath);
           } else {
-            const vendorPath = path.join(vendorDir, moduleToVendorPath(id))
-            try {
-              await mkdirp(path.dirname(vendorPath));
-              await fs.copyFile(id, vendorPath);
-            } catch (e) {
-              throw new Error(`Could not create vendor file for ${originalId}`);
-            }
+            const vendorPath = path.join(vendorDir, moduleToVendorPath(id));
+            copyVendor(originalId, id, vendorPath);
             vendor.imports[originalId] = path.relative(vendorDir, vendorPath);
           }
           return null;
@@ -115,7 +128,7 @@ import { moduleToVendorPath } from "./module";
             return { id: metaContent.path, external: false };
           }
 
-          console.log(c.green(`Download ${c.reset(id)}`));
+          log.info(c.green(`Download ${c.reset(id)}`));
           try {
             const res = await fetch(id);
             const mimeExtension = mime.extension(
@@ -143,7 +156,7 @@ import { moduleToVendorPath } from "./module";
             handledModules.set(id, destFilename);
             return { id: destFilename, external: false };
           } catch (e) {
-            console.error(c.red("Failed"), id, e);
+            log.error(c.red("Failed"), id, e);
             process.exit(1);
           }
         },
@@ -169,13 +182,12 @@ import { moduleToVendorPath } from "./module";
   if (isVendor) {
     const { deps } = (await node.transformRequest("./index.ts")) || {};
     if (!deps || !deps.length) {
-      console.log(c.red("No dependencies found"));
+      log.info(c.red("No dependencies found"));
       process.exit(1);
     }
     for (const dep of deps) {
       await transformDep(dep, node);
     }
-    // console.log(node.server.moduleGraph)
   } else {
     await runner.executeFile("./index.ts");
   }
@@ -186,20 +198,28 @@ import { moduleToVendorPath } from "./module";
       path.join(vendorDir, "import_map.json"),
       JSON.stringify(vendor, null, 2)
     );
-
+    log.success('To use vendored modules, specify the `--import-map` flag: `venode --import-map=vendor/import_map.json`')
   }
-
 
   process.exit(0);
 })();
 
 async function transformDep(dep: string, node: ViteNodeServer): Promise<void> {
   const deps = (await node.transformRequest(dep))?.deps;
-  // console.log('deps', deps)
   if (!deps || !deps.length) {
     return;
   }
   for (const dep of deps) {
     await transformDep(dep, node);
+  }
+}
+
+async function copyVendor(originalId: string, id: string, vendorPath: string) {
+  try {
+    await mkdirp(path.dirname(vendorPath));
+    await fs.copyFile(id, vendorPath);
+  } catch (e) {
+    log.error(`Could not create vendor file for ${originalId}`, e);
+    process.exit(1);
   }
 }
