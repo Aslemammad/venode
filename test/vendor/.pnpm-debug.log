@@ -1,0 +1,24 @@
+{
+  "0 debug pnpm:scope": {
+    "selected": 1,
+    "workspacePrefix": "/home/bagher/venode"
+  },
+  "1 info pnpm": {
+    "err": {
+      "name": "Error",
+      "message": "not found: venode",
+      "code": "ENOENT",
+      "stack": "Error: not found: venode\n    at getNotFoundError (/home/bagher/.nvm/versions/node/v16.13.2/lib/node_modules/pnpm/dist/pnpm.cjs:41576:51)\n    at Function.whichSync [as sync] (/home/bagher/.nvm/versions/node/v16.13.2/lib/node_modules/pnpm/dist/pnpm.cjs:41653:13)\n    at getCommandAbsolutePathSync (/home/bagher/.nvm/versions/node/v16.13.2/lib/node_modules/pnpm/dist/pnpm.cjs:43218:44)\n    at default_1 (/home/bagher/.nvm/versions/node/v16.13.2/lib/node_modules/pnpm/dist/pnpm.cjs:43227:32)\n    at /home/bagher/.nvm/versions/node/v16.13.2/lib/node_modules/pnpm/dist/pnpm.cjs:178022:39"
+    }
+  },
+  "2 error pnpm": {
+    "code": "ERR_PNPM_RECURSIVE_EXEC_FIRST_FAIL",
+    "prefix": "/home/bagher/venode/test/vendor",
+    "err": {
+      "name": "pnpm",
+      "message": "not found: venode",
+      "code": "ERR_PNPM_RECURSIVE_EXEC_FIRST_FAIL",
+      "stack": "Error: not found: venode\n    at getNotFoundError (/home/bagher/.nvm/versions/node/v16.13.2/lib/node_modules/pnpm/dist/pnpm.cjs:41576:51)\n    at Function.whichSync [as sync] (/home/bagher/.nvm/versions/node/v16.13.2/lib/node_modules/pnpm/dist/pnpm.cjs:41653:13)\n    at getCommandAbsolutePathSync (/home/bagher/.nvm/versions/node/v16.13.2/lib/node_modules/pnpm/dist/pnpm.cjs:43218:44)\n    at default_1 (/home/bagher/.nvm/versions/node/v16.13.2/lib/node_modules/pnpm/dist/pnpm.cjs:43227:32)\n    at /home/bagher/.nvm/versions/node/v16.13.2/lib/node_modules/pnpm/dist/pnpm.cjs:178022:39"
+    }
+  }
+}

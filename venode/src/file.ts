@@ -60,3 +60,12 @@ export function resolveExtension(id: string): Extension | undefined {
     return ".ts";
   }
 }
+
+const invalidChars ='\\:?*"><|'
+
+export function urlToFilenameWithoutHash({pathname, host, hostname, port}: URL) {
+  for (const char of invalidChars) {
+    pathname = pathname.replace(char, "_");
+  }
+  return path.join('/', (port ? `${hostname}_PORT${port}` : host), pathname)
+}

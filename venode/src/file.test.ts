@@ -1,6 +1,10 @@
 import { posix as path } from "path";
 import { expect, test } from "vitest";
-import { filenameWithExtension, urlToFilename } from "./file";
+import {
+  filenameWithExtension,
+  urlToFilename,
+  urlToFilenameWithoutHash,
+} from "./file";
 import { Extension } from "./types";
 
 const cases = [
@@ -63,4 +67,22 @@ test("get file with extension", () => {
       expected.split(path.posix.sep).join(path.sep)
     );
   }
+});
+
+test("url to file path without hash", () => {
+  expect(
+    urlToFilenameWithoutHash(
+      new URL("http://deno.land/std/http/file_server.ts")
+    )
+  ).toBe("/deno.land/std/http/file_server.ts");
+  expect(
+    urlToFilenameWithoutHash(
+      new URL("https://ga.jspm.io/npm:is-number@7.0.0/index.js")
+    )
+  ).toBe("/ga.jspm.io/npm_is-number@7.0.0/index.js");
+  expect(
+    urlToFilenameWithoutHash(
+      new URL("https://deno.land:8080/x/foo.ts")
+    )
+  ).toBe("/deno.land_PORT8080/x/foo.ts");
 });

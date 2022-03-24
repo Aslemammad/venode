@@ -1,7 +1,8 @@
+import { fileURLToPath } from "url";
 import mkdirp from "mkdirp";
 import { promises as fs } from "fs";
 import mime from "mime-types";
-import {posix as path} from "path";
+import { posix as path } from "path";
 import c from "picocolors";
 import { fetch } from "undici";
 import { createServer } from "vite";
@@ -12,18 +13,71 @@ import {
   isValidExtension,
   resolveExtension,
   urlToFilename,
+  urlToFilenameWithoutHash,
 } from "./file";
-import { Extension, Meta } from "./types";
+import { Extension, Meta, Vendor } from "./types";
+import { moduleToVendorPath } from "./module";
 
 (async () => {
   const handledModules = new Map<string, string>();
+  const isVendor = process.argv.includes("vendor");
+  const dest = path.join(process.cwd(), "node_modules");
+  const vendor: Vendor = { imports: {} };
+  const vendorDir = path.join(process.cwd(), "vendor");
+  console.log(process.argv, isVendor);
 
   const server = await createServer({
     plugins: [
       {
         enforce: "pre",
+        name: "venode:vendor",
+        async resolveId(id, importer) {
+          if (!isVendor || id.startsWith(".") || id.startsWith("/"))
+            return null;
+          const originalId = id;
+
+          const plugins = server.config.plugins.filter(
+            (p) => p.name !== "venode:vendor"
+          );
+          for (const plugin of plugins) {
+            const result = await plugin.resolveId?.call(this, id, importer, {});
+            if (!result) {
+              continue;
+            } else if (typeof result === "object") {
+              id = result.id;
+            } else if (typeof result === "string") {
+              id = result;
+            }
+          }
+          if (originalId.startsWith("http")) {
+            const vendorPath = path.join(
+              vendorDir,
+              urlToFilenameWithoutHash(new URL(originalId))
+            );
+            try {
+              await mkdirp(path.dirname(vendorPath));
+              await fs.copyFile(id, vendorPath);
+            } catch (e) {
+              throw new Error(`Could not create vendor file for ${originalId}`);
+            }
+            vendor.imports[originalId] = path.relative(vendorDir, vendorPath);
+          } else {
+            const vendorPath = path.join(vendorDir, moduleToVendorPath(id))
+            try {
+              await mkdirp(path.dirname(vendorPath));
+              await fs.copyFile(id, vendorPath);
+            } catch (e) {
+              throw new Error(`Could not create vendor file for ${originalId}`);
+            }
+            vendor.imports[originalId] = path.relative(vendorDir, vendorPath);
+          }
+          return null;
+        },
+      },
+      {
+        enforce: "pre",
         name: "venode:pre",
-        resolveId(id, importer) {
+        async resolveId(id, importer) {
           if (!id.startsWith(".")) return null;
           const module = [...handledModules.entries()].find(
             (item) => item[1] === importer
@@ -63,7 +117,6 @@ import { Extension, Meta } from "./types";
 
           console.log(c.green(`Download ${c.reset(id)}`));
           try {
-            debugger;
             const res = await fetch(id);
             const mimeExtension = mime.extension(
               res.headers.get("content-type") || ""
@@ -99,8 +152,6 @@ import { Extension, Meta } from "./types";
   });
   await server.pluginContainer.buildStart({});
 
-  const dest = path.join(server.config.root, "node_modules");
-
   const node = new ViteNodeServer(server as any);
 
   const runner = new ViteNodeRunner({
@@ -114,7 +165,41 @@ import { Extension, Meta } from "./types";
     },
   });
 
-  await runner.executeFile("./index.ts");
+  // server.
+  if (isVendor) {
+    const { deps } = (await node.transformRequest("./index.ts")) || {};
+    if (!deps || !deps.length) {
+      console.log(c.red("No dependencies found"));
+      process.exit(1);
+    }
+    for (const dep of deps) {
+      await transformDep(dep, node);
+    }
+    // console.log(node.server.moduleGraph)
+  } else {
+    await runner.executeFile("./index.ts");
+  }
 
-  await server.close();
+  await node.server.close();
+  if (isVendor) {
+    await fs.writeFile(
+      path.join(vendorDir, "import_map.json"),
+      JSON.stringify(vendor, null, 2)
+    );
+
+  }
+
+
+  process.exit(0);
 })();
+
+async function transformDep(dep: string, node: ViteNodeServer): Promise<void> {
+  const deps = (await node.transformRequest(dep))?.deps;
+  // console.log('deps', deps)
+  if (!deps || !deps.length) {
+    return;
+  }
+  for (const dep of deps) {
+    await transformDep(dep, node);
+  }
+}

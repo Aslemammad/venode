@@ -62,6 +62,12 @@ importers:
     dependencies:
       venode: link:../../venode
 
+  test/vendor:
+    specifiers:
+      venode: workspace:^0.1.0
+    dependencies:
+      venode: link:../../venode
+
   venode:
     specifiers:
       '@types/mime-types': ^2.1.1

@@ -1,0 +1,14 @@
+{
+  "name": "vendor",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.ts",
+  "scripts": {
+    "test": ""
+  },
+  "author": "M. Bagher Abiat",
+  "license": "ISC",
+  "dependencies": {
+    "venode": "workspace:^0.1.0"
+  }
+}
