@@ -8,6 +8,11 @@ describe("", async () => {
 
   let runStdout: string;
   try {
+    try {
+      await fs.rm(path.join(".", "node_modules", "https"), { recursive: true });
+    } catch (e) {
+      console.log(e);
+    }
     vendorStdout = (
       await execa("pnpm", ["venode", "vendor", "index.ts"], { stdout: "pipe" })
     ).stdout;

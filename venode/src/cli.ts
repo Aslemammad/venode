@@ -1,4 +1,3 @@
-import { fileURLToPath } from "url";
 import mkdirp from "mkdirp";
 import { promises as fs } from "fs";
 import mime from "mime-types";
@@ -55,12 +54,12 @@ if (isVendor && importMap) {
         enforce: "pre",
         name: "venode:vendor",
         async resolveId(id, importer) {
-          if (!isVendor || id.startsWith(".") || id.startsWith("/"))
+          if (!isVendor || importMap || id.startsWith(".") || id.startsWith("/"))
             return null;
           const originalId = id;
 
           const plugins = server.config.plugins.filter(
-            (p) => p.name !== "venode:vendor"
+            (p) => !p.name.includes(':vendor')
           );
           for (const plugin of plugins) {
             const result = await plugin.resolveId?.call(this, id, importer, {});
