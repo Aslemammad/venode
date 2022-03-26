@@ -1,4 +1,4 @@
-import {posix as path} from 'path'
+import { posix as path } from "path";
 import log from "consola";
 import { existsSync } from "fs";
 
@@ -23,7 +23,7 @@ export const validateArgs = () => {
   if (!args.script) {
     args.isVendor = false;
     const importMap = argv.findIndex((arg) => arg.includes("--import-map="));
-    log.log(importMap)
+    log.log(importMap);
     if (importMap > -1) {
       args.script = argv[importMap - 1];
       args.importMap = argv[importMap].split("=")[1];
@@ -35,7 +35,7 @@ export const validateArgs = () => {
   }
   !existsSync(args.script) && log.error("script not found");
 
-  args.script = path.resolve(args.script)
+  args.script = path.resolve(args.script);
 
-  return args
+  return args;
 };
