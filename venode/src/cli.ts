@@ -29,18 +29,16 @@ if (isVendor && importMap) {
 }
 
 const currentDir = fileURLToPath((process.cwd()))
-console.log('here', currentDir)
 
 ;(async () => {
   const handledModules = new Map<string, string>();
-  const dest = path.join(process.cwd(), "node_modules");
+  const dest = path.join(currentDir, "node_modules");
   let vendor: Vendor = { imports: {} };
   try {
     vendor = JSON.parse(await fs.readFile(importMap!, "utf8"));
     log.success(`Reading modules from vendor/import_map.json`)
   } catch {}
-  const vendorDir = path.join(process.cwd(), "vendor");
-  console.log(vendorDir)
+  const vendorDir = path.join(currentDir, "vendor");
 
   const server = await createServer({
     plugins: [
@@ -99,8 +97,6 @@ console.log('here', currentDir)
           const module = [...handledModules.entries()].find(
             (item) => item[1] === importer
           );
-          console.log(handledModules)
-          console.log('here', module, id, importer)
           if (!module) {
             return null;
           }
