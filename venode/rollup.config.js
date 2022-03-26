@@ -12,10 +12,7 @@ const external = [
   ...Object.keys(pkg.peerDependencies || []),
   "worker_threads",
   "esbuild",
-  "rollup-plugin-node-builtins",
-  "rollup-plugin-node-globals",
   "fs/promises",
-  "miniflare",
 ];
 
 export default [
