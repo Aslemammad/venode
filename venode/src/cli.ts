@@ -18,25 +18,19 @@ import {
 import { Extension, Meta, Vendor } from "./types";
 import { moduleToVendorPath } from "./module";
 import { fileURLToPath } from "mlly";
-const isVendor = process.argv.includes("vendor");
-const isImportMap = process.argv.findIndex((i) => i.includes("--import-map"));
-const importMap =
-  isImportMap > -1 ? process.argv[isImportMap].split("=")[1] : null;
+import { validateArgs } from "./args";
 
-if (isVendor && importMap) {
-  log.error("--import-map is not supported when --vendor is enabled.");
-  process.exit(1);
-}
+const { importMap, isVendor, script } = validateArgs();
 
-const currentDir = fileURLToPath((process.cwd()))
+const currentDir = fileURLToPath(process.cwd());
 
-;(async () => {
+(async () => {
   const handledModules = new Map<string, string>();
   const dest = path.join(currentDir, "node_modules");
   let vendor: Vendor = { imports: {} };
   try {
-    vendor = JSON.parse(await fs.readFile(importMap!, "utf8"));
-    log.success(`Reading modules from vendor/import_map.json`)
+    vendor = JSON.parse(await fs.readFile(importMap, "utf8"));
+    log.success(`Reading modules from vendor/import_map.json`);
   } catch {}
   const vendorDir = path.join(currentDir, "vendor");
 
@@ -46,9 +40,9 @@ const currentDir = fileURLToPath((process.cwd()))
         enforce: "pre",
         name: "venode:vendor:resolve",
         resolveId(id) {
-          if (!importMap) return null
+          if (!importMap) return null;
           if (vendor.imports[id]) {
-            return path.join(vendorDir, vendor.imports[id])
+            return path.join(vendorDir, vendor.imports[id]);
           }
           return null;
         },
@@ -57,12 +51,17 @@ const currentDir = fileURLToPath((process.cwd()))
         enforce: "pre",
         name: "venode:vendor",
         async resolveId(id, importer) {
-          if (!isVendor || importMap || id.startsWith(".") || id.startsWith("/"))
+          if (
+            !isVendor ||
+            importMap ||
+            id.startsWith(".") ||
+            id.startsWith("/")
+          )
             return null;
           const originalId = id;
 
           const plugins = server.config.plugins.filter(
-            (p) => !p.name.includes(':vendor')
+            (p) => !p.name.includes(":vendor")
           );
           for (const plugin of plugins) {
             const result = await plugin.resolveId?.call(this, id, importer, {});
@@ -182,7 +181,7 @@ const currentDir = fileURLToPath((process.cwd()))
 
   // server.
   if (isVendor) {
-    const { deps } = (await node.transformRequest("./index.ts")) || {};
+    const { deps } = (await node.transformRequest(script)) || {};
     if (!deps || !deps.length) {
       log.info(c.red("No dependencies found"));
       process.exit(1);
@@ -191,7 +190,7 @@ const currentDir = fileURLToPath((process.cwd()))
       await transformDep(dep, node);
     }
   } else {
-    await runner.executeFile("./index.ts");
+    await runner.executeFile(script);
   }
 
   await node.server.close();
@@ -200,7 +199,9 @@ const currentDir = fileURLToPath((process.cwd()))
       path.join(vendorDir, "import_map.json"),
       JSON.stringify(vendor, null, 2)
     );
-    log.success('To use vendored modules, specify the `--import-map` flag: `venode --import-map=vendor/import_map.json`')
+    log.success(
+      "To use vendored modules, specify the `--import-map` flag: `venode --import-map=vendor/import_map.json`"
+    );
   }
 
   process.exit(0);
