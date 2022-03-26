@@ -1,59 +1,69 @@
-# vite-plugin-cloudflare 🔥
 
-[![Discord](https://img.shields.io/discord/815937377888632913.svg?label=&logo=discord&logoColor=ffffff&color=7389D8&labelColor=6A7EC2)](https://discord.gg/Rhg9cEghMF)
+<p align="center">
+<img src="https://user-images.githubusercontent.com/37929992/160231026-e3e79440-fc20-4f5d-a3b2-21ccc2674148.png" width="200px" height="100px">
+</p>
+  
+<h1 align="center">
+Venode
+</h1>
+<p align="center">
+The missing child of Node.js and Deno.
+<p>
+<p align="center">
+  <a href="https://www.npmjs.com/package/venode"><img src="https://img.shields.io/npm/v/venode?color=a1b858&label="></a>
+<p>
+<br>
+Venode is a node runner that supports deno features like vendoring and http imports!
 
-Vite-plugin-cloudflare is a software for transforming & bundling cloudflare workers with shimming [node globals](https://github.com/calvinmetcalf/rollup-plugin-node-globals) and [builtins](https://github.com/calvinmetcalf/rollup-plugin-node-builtins/)  like `process`, `os`, `stream` and plenty of other node functions and modules using **Esbuild** and **Vite**!
+## Features
 
-- ⚡ Lightning builds
-- 💥 Workers compatible build using shimming
-- 🔥 Fast development incremental reloads
-- ✏️ Easy simulation using [Miniflare](https://miniflare.dev/) 
+- Javascript/Typescript http imports
+- Vendor dependencies
+- Out-of-box TypeScript / JSX support
+- Built on top of Vite
+- Node >= 14
 
-## Install
+### Http imports
+You can easily import javascript/typescript code from the web!
+```ts
+// index.ts
+import { assert } from "https://raw.githubusercontent.com/denoland/deno_std/main/_util/assert.ts";
+
+console.log("here is deno assert function in node:", assert);
 ```
-npm install -D vite-plugin-cloudflare
+In your terminal:
+```bash
+> venode index.ts
+ℹ Download https://raw.githubusercontent.com/denoland/deno_std/main/_util/assert.ts
+here is deno assert function in node: [Function: assert]
 ```
+### Vendor
+Vendoring packages is possible, so your app would be able to rely on the same code all the time! 
+```bash
+> venode vendor index.ts
+ℹ Download https://raw.githubusercontent.com/denoland/deno_std/main/_util/assert.ts
+✔ To use vendored modules, specify the --import-map flag: venode --import-map=vendor/import_map.json
+```
+> The `vendor` directory should be checked into the version control, so you (your team) use the same dependencies all the time!
  
- ## Build
- ```
- vite-plugin-cloudflare build input.ts worker.js 
- # or 
- vpc build input.ts worker.js 
- ```
- Now you can upload or use the `worker.js` file as your cloudflare worker file.
- 
- ## Development
- ```
-  vpc dev input.ts 
- ```
-
-Here you can navigate to `localhost:3000` and see the output of your worker. With every change to the related files, Esbuild is going to rebuild incrementally through the Vite server, then Miniflare reloads the script so you can check the new results by refreshing your browser or reloading your client.
-
-![image_2021-12-28_22-53-23](https://user-images.githubusercontent.com/37929992/147600217-e2d632cb-78d1-45d8-86cc-081fee8e8f64.png)
-
-## More
-For seeing more options:
+Now you can specify the `vendor/import_map.json` as the import map in venode:
+```bash
+> venode index.ts --import-map=vendor/import_map.json
+✔ Reading modules from vendor/import_map.json
+here is deno assert function in node: [Function: assert]
 ```
-vpc -h
-```
-And more examples in [test/](https://github.com/Aslemammad/vite-plugin-cloudflare/tree/main/test).
+Read more about vendoring in deno's [release notes](https://deno.com/blog/v1.19#deno-vendor). 
 
-## New features
+# Contributing
+Feel free to create issues for the bugs or features you want. 
 
-- `?raw` support like vitejs
-- `__STATIC_CONTENT_MANIFEST` as external
-
-## Credits
-[Brillout](https://github.com/brillout/)
-
-[Viteflare](https://github.com/alloc/viteflare)
-
-[Cloudflare](https://workers.cloudflare.com/)
-
-[Miniflare](http://miniflare.dev/)
-
-[Vitest](https://github.com/vitest-dev/vitest)
-
-[Node-builtins](https://github.com/calvinmetcalf/rollup-plugin-node-builtins)
-
-[Cac](https://www.npmjs.com/package/cac#display-help-message-and-version)
+# Credits
+[vite-node](https://github.com/vitest-dev/vitest/tree/main/packages/vite-node)
+  
+[deno](https://deno.land/)
+  
+[mlly](https://github.com/unjs/mlly/)
+  
+[consola](https://github.com/unjs/consola)
+  
+[undici](https://undici.nodejs.org/)
