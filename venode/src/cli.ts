@@ -17,6 +17,7 @@ import {
 } from "./file";
 import { Extension, Meta, Vendor } from "./types";
 import { moduleToVendorPath } from "./module";
+import { fileURLToPath } from "mlly";
 const isVendor = process.argv.includes("vendor");
 const isImportMap = process.argv.findIndex((i) => i.includes("--import-map"));
 const importMap =
@@ -27,7 +28,10 @@ if (isVendor && importMap) {
   process.exit(1);
 }
 
-(async () => {
+const currentDir = fileURLToPath((process.cwd()))
+console.log('here', currentDir)
+
+;(async () => {
   const handledModules = new Map<string, string>();
   const dest = path.join(process.cwd(), "node_modules");
   let vendor: Vendor = { imports: {} };
