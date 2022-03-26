@@ -79,11 +79,11 @@ const currentDir = fileURLToPath((process.cwd()))
               vendorDir,
               urlToFilenameWithoutHash(new URL(originalId))
             );
-            copyVendor(originalId, id, vendorPath);
+            await copyVendor(originalId, id, vendorPath);
             vendor.imports[originalId] = path.relative(vendorDir, vendorPath);
           } else {
             const vendorPath = path.join(vendorDir, moduleToVendorPath(id));
-            copyVendor(originalId, id, vendorPath);
+            await copyVendor(originalId, id, vendorPath);
             vendor.imports[originalId] = path.relative(vendorDir, vendorPath);
           }
           return null;
