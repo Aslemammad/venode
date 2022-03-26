@@ -13,7 +13,6 @@ The missing child of Node.js and Deno.
   <a href="https://www.npmjs.com/package/venode"><img src="https://img.shields.io/npm/v/venode?color=a1b858&label="></a>
 <p>
 <br>
-<br>
 Venode is a node runner that supports deno features like vendoring and http imports!
 
 ## Features
