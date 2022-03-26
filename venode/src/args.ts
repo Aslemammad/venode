@@ -12,7 +12,6 @@ type Args = {
 const args: Args = { script: "", isVendor: false, importMap: "" };
 
 export const validateArgs = () => {
-  console.log(argv, import.meta.url);
   const vendor = argv.findIndex((arg) => arg === "vendor");
   // vendor
   if (vendor > -1) {
