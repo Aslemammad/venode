@@ -36,6 +36,7 @@ if (isVendor && importMap) {
     log.success(`Reading modules from vendor/import_map.json`)
   } catch {}
   const vendorDir = path.join(process.cwd(), "vendor");
+  console.log(vendorDir)
 
   const server = await createServer({
     plugins: [
