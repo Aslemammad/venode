@@ -22,7 +22,6 @@ export const validateArgs = () => {
   if (!args.script) {
     args.isVendor = false;
     const importMap = argv.findIndex((arg) => arg.includes("--import-map="));
-    log.log(importMap);
     if (importMap > -1) {
       args.script = argv[importMap - 1];
       args.importMap = argv[importMap].split("=")[1];
