@@ -51,7 +51,6 @@
     "node": ">=14.0.0"
   },
   "dependencies": {
-    "cac": "^6.7.12",
     "esbuild": "^0.14.6",
     "undici": "^4.16.0",
     "vite-node": "^0.7.6"
