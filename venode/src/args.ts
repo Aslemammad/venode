@@ -1,8 +1,6 @@
 import {posix as path} from 'path'
 import log from "consola";
-import { assert } from "assert";
 import { existsSync } from "fs";
-import consolaGlobalInstance from "consola";
 
 const argv = process.argv;
 
