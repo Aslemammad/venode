@@ -77,7 +77,6 @@ importers:
       '@types/rollup-plugin-node-builtins': ^2.1.2
       '@types/rollup-plugin-node-globals': ^1.4.1
       consola: ^2.15.3
-      esbuild: ^0.14.6
       mime-types: ^2.1.35
       miniflare: ^2.3.0
       mkdirp: ^1.0.4
@@ -89,7 +88,6 @@ importers:
       vite: 2.7.0
       vite-node: ^0.7.6
     dependencies:
-      esbuild: 0.14.27
       undici: 4.16.0
       vite-node: 0.7.6
     devDependencies:
