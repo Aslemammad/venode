@@ -23,9 +23,7 @@ import { validateArgs } from "./args";
 const { importMap, isVendor, script } = validateArgs();
 
 const currentDir = fileURLToPath(process.cwd());
-
 let errorCode = 0;
-
 (async () => {
   const handledModules = new Map<string, string>();
   const dest = path.join(currentDir, "node_modules");
@@ -181,18 +179,23 @@ let errorCode = 0;
     },
   });
 
-  // server.
-  if (isVendor) {
-    const { deps } = (await node.transformRequest(script)) || {};
-    if (!deps || !deps.length) {
-      log.info(c.red("No dependencies found"));
-      process.exit(1);
+  try {
+    // server
+    if (isVendor) {
+      const { deps } = (await node.transformRequest(script)) || {};
+      if (!deps || !deps.length) {
+        log.info(c.red("No dependencies found"));
+        process.exit(1);
+      }
+      for (const dep of deps) {
+        await transformDep(dep, node);
+      }
+    } else {
+      await runner.executeFile(script);
     }
-    for (const dep of deps) {
-      await transformDep(dep, node);
-    }
-  } else {
-    await runner.executeFile(script);
+  } catch (e) {
+    console.error(e);
+    errorCode = 1;
   }
 
   await node.server.close();
@@ -205,14 +208,7 @@ let errorCode = 0;
       "To use vendored modules, specify the `--import-map` flag: `venode --import-map=vendor/import_map.json`"
     );
   }
-})()
-  .catch((e) => {
-    console.error(e)
-    errorCode = 1;
-  })
-  .finally(() => {
-    process.exit(errorCode);
-  });
+})().finally(() => process.exit(errorCode));
 
 async function transformDep(dep: string, node: ViteNodeServer): Promise<void> {
   const deps = (await node.transformRequest(dep))?.deps;
