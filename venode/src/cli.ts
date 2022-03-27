@@ -3,7 +3,8 @@ import { promises as fs } from "fs";
 import mime from "mime-types";
 import { posix as path } from "path";
 import c from "picocolors";
-import { fetch } from "undici";
+import got from 'got'
+import { $fetch as fetch } from "ohmyfetch";
 import { createServer } from "vite";
 import { ViteNodeServer } from "vite-node/server";
 import { ViteNodeRunner } from "vite-node/client";
@@ -131,9 +132,9 @@ const currentDir = fileURLToPath(process.cwd());
 
           log.info(c.green(`Download ${c.reset(id)}`));
           try {
-            const res = await fetch(id);
+            const res = await got.get(id);
             const mimeExtension = mime.extension(
-              res.headers.get("content-type") || ""
+              res.headers["content-type"] || ""
             );
             const ext = resolveExtension(url.href) || "." + mimeExtension;
 
@@ -141,7 +142,7 @@ const currentDir = fileURLToPath(process.cwd());
               throw new Error(`Unknown extension for ${id}`);
             }
             const filename = filenameWithExtension(url, ext as Extension);
-            const text = await res.text();
+            const text = res.body;
 
             const destFilename = path.join(dest, filename);
 

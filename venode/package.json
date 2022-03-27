@@ -32,15 +32,14 @@
     "@types/mime-types": "^2.1.1",
     "@types/mkdirp": "^1.0.2",
     "consola": "^2.15.3",
+    "mime-types": "^2.1.35",
     "miniflare": "^2.3.0",
     "mkdirp": "^1.0.4",
+    "mlly": "^0.3.16",
+    "picocolors": "^1.0.0",
     "setimmediate": "^1.0.5",
     "typescript": "^4.5.3",
     "vite": "2.7.0",
-    "mime-types": "^2.1.35",
-    "mlly": "^0.3.16",
-    "picocolors": "^1.0.0",
-    "undici": "^4.16.0",
     "vite-node": "^0.7.6"
   },
   "peerDependencies": {
@@ -49,5 +48,8 @@
   "engines": {
     "node": ">=14.0.0"
   },
-  "dependencies": {}
+  "dependencies": {
+    "got": "^12.0.3",
+    "ohmyfetch": "^0.4.15"
+  }
 }
