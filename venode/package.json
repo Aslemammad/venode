@@ -39,7 +39,9 @@
     "vite": "2.7.0",
     "mime-types": "^2.1.35",
     "mlly": "^0.3.16",
-    "picocolors": "^1.0.0"
+    "picocolors": "^1.0.0",
+    "undici": "^4.16.0",
+    "vite-node": "^0.7.6"
   },
   "peerDependencies": {
     "vite": "*"
@@ -47,8 +49,5 @@
   "engines": {
     "node": ">=14.0.0"
   },
-  "dependencies": {
-    "undici": "^4.16.0",
-    "vite-node": "^0.7.6"
-  }
+  "dependencies": {}
 }
