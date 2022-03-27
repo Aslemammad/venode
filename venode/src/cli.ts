@@ -4,7 +4,6 @@ import mime from "mime-types";
 import { posix as path } from "path";
 import c from "picocolors";
 import got from "got";
-import { $fetch as fetch } from "ohmyfetch";
 import { createServer } from "vite";
 import { ViteNodeServer } from "vite-node/server";
 import { ViteNodeRunner } from "vite-node/client";
@@ -24,6 +23,8 @@ import { validateArgs } from "./args";
 const { importMap, isVendor, script } = validateArgs();
 
 const currentDir = fileURLToPath(process.cwd());
+
+let errorCode = 0;
 
 (async () => {
   const handledModules = new Map<string, string>();
@@ -204,9 +205,13 @@ const currentDir = fileURLToPath(process.cwd());
       "To use vendored modules, specify the `--import-map` flag: `venode --import-map=vendor/import_map.json`"
     );
   }
-
-  process.exit(0);
-})().catch(() => {});
+})()
+  .catch(() => {
+    errorCode = 1;
+  })
+  .finally(() => {
+    process.exit(errorCode);
+  });
 
 async function transformDep(dep: string, node: ViteNodeServer): Promise<void> {
   const deps = (await node.transformRequest(dep))?.deps;
