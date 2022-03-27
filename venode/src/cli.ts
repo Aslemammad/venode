@@ -3,7 +3,7 @@ import { promises as fs } from "fs";
 import mime from "mime-types";
 import { posix as path } from "path";
 import c from "picocolors";
-import got from 'got'
+import got from "got";
 import { $fetch as fetch } from "ohmyfetch";
 import { createServer } from "vite";
 import { ViteNodeServer } from "vite-node/server";
@@ -206,7 +206,7 @@ const currentDir = fileURLToPath(process.cwd());
   }
 
   process.exit(0);
-})();
+})().catch(() => {});
 
 async function transformDep(dep: string, node: ViteNodeServer): Promise<void> {
   const deps = (await node.transformRequest(dep))?.deps;
