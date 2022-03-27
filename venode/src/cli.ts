@@ -206,7 +206,8 @@ let errorCode = 0;
     );
   }
 })()
-  .catch(() => {
+  .catch((e) => {
+    console.error(e)
     errorCode = 1;
   })
   .finally(() => {
